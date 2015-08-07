@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 import com.novopay.hackathon.hackernewsclone.Model.Collection1;
 import com.novopay.hackathon.hackernewsclone.Model.HackerAPIRResponse;
+import com.novopay.hackathon.hackernewsclone.Model.OfflineNews;
 import com.novopay.hackathon.hackernewsclone.Networking.HackerAPI;
 import com.novopay.hackathon.hackernewsclone.Provider.HackerDBHelper;
 
@@ -37,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
     private Cursor mainCursor;
     private HackerAPI.HackerInterface hackerInterface;
     private NewsAdapter newsAdapter;
+    private List<OfflineNews> offCollection = new ArrayList<OfflineNews>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,28 @@ public class MainActivity extends ActionBarActivity {
         db = hackerDBHelper.getReadableDatabase();
 
         hackerInterface = HackerAPI.getAPI();
+
+        OfflineNews offlineNews =  new OfflineNews("","","",false);
+        mainCursor = db.rawQuery("select * from "+ HackerDBHelper.TABLE.OFFLINE,null);
+        if(mainCursor.moveToFirst()){
+            do{
+
+                offlineNews.setNewsName(mainCursor.getString(mainCursor.getColumnIndex(HackerDBHelper.OFFLINE_COLOUMN.NAME)));
+                offlineNews.setNewsUrl(mainCursor.getString(mainCursor.getColumnIndex(HackerDBHelper.OFFLINE_COLOUMN.URL)));
+                offlineNews.setPoints(mainCursor.getString(mainCursor.getColumnIndex(HackerDBHelper.OFFLINE_COLOUMN.POINTS)));
+                if(mainCursor.getInt(mainCursor.getColumnIndex(HackerDBHelper.OFFLINE_COLOUMN.IS_FAV))==1)
+                    offlineNews.setIsFav(true);
+                else
+                    offlineNews.setIsFav(false);
+
+                offCollection.add(offlineNews);
+                Log.d("db", "Value of name  is " + mainCursor.getString(mainCursor.getColumnIndex(HackerDBHelper.OFFLINE_COLOUMN.NAME)));
+
+            }while(mainCursor.moveToNext());
+        }
+
+
+
 
         hackerInterface.getNewsList(new Callback<HackerAPIRResponse>() {
             @Override
@@ -114,8 +138,8 @@ public class MainActivity extends ActionBarActivity {
 
             }
 
-            db.insert(HackerDBHelper.TABLE.OFFLINE,null,cv);
-            Log.d("std","database updated");
+            db.insert(HackerDBHelper.TABLE.OFFLINE, null, cv);
+            Log.d("std", "database updated");
 
 
 
