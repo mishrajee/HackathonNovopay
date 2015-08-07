@@ -62,6 +62,8 @@ public class MainActivity extends ActionBarActivity {
                         Log.d("MainActivity", "On item clicked");
                         Intent intent=new Intent(MainActivity.this,WebViewActivity.class);
                         intent.putExtra("UrlName",collection.get(position).getNewsName().getHref());
+
+                         intent.putExtra("UrlName",collection.get(position).getNewsName().getHref());
                         startActivity(intent);
                     }
                 });
