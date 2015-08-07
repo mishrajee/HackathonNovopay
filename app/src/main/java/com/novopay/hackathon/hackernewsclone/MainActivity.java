@@ -60,6 +60,9 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("MainActivity", "On item clicked");
+                        Intent intent=new Intent(MainActivity.this,WebViewActivity.class);
+                        intent.putExtra("UrlName",collection.get(position).getNewsName().getHref());
+                        startActivity(intent);
                     }
                 });
 
@@ -87,22 +90,34 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    private long setFavourite(Collection1 collection){
+    private void setFavourite(Collection1 collection){
 
         ContentValues cv = new ContentValues();
+
         cv.put(HackerDBHelper.FAVOURITE_COLOUMN.NAME,collection.getNewsName().getText());
         cv.put(HackerDBHelper.FAVOURITE_COLOUMN.POINTS,collection.getPoints());
         cv.put(HackerDBHelper.FAVOURITE_COLOUMN.URL,collection.getNewsName().getHref());
 
-        long row_id= db.insert(HackerDBHelper.TABLE.FAVOURITE,null,cv);
+        db.insert(HackerDBHelper.TABLE.FAVOURITE,null,cv);
 
-        return row_id;
+        cv.clear();
+        //cv.put(HackerDBHelper.OFFLINE_COLOUMN.NAME,collection.getNewsName().getText());
+        //cv.put(HackerDBHelper.OFFLINE_COLOUMN.POINTS,collection.getPoints());
+        //cv.put(HackerDBHelper.OFFLINE_COLOUMN.URL,collection.getNewsName().getHref());
+        cv.put(HackerDBHelper.OFFLINE_COLOUMN.IS_FAV,1);
+
+        db.update(HackerDBHelper.TABLE.OFFLINE,cv, HackerDBHelper.OFFLINE_COLOUMN.URL+" = "+collection.getNewsName().getHref(),null);
+
 
     }
 
-    private Boolean removeFavourite(long row_id){
+    private void removeFavourite(String url){
 
-       return db.delete(HackerDBHelper.TABLE.FAVOURITE, BaseColumns._ID+" = "+row_id,null)>0;
+       db.delete(HackerDBHelper.TABLE.FAVOURITE, HackerDBHelper.FAVOURITE_COLOUMN.URL+" = "+url,null);
+       ContentValues cv = new ContentValues();
+       cv.put(HackerDBHelper.OFFLINE_COLOUMN.IS_FAV,0);
+       db.update(HackerDBHelper.TABLE.OFFLINE,cv, HackerDBHelper.OFFLINE_COLOUMN.URL+" = "+url,null);
+
 
     }
 
