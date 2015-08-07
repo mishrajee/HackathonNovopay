@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.novopay.hackathon.hackernewsclone.Model.Collection1;
@@ -50,20 +52,36 @@ public class MainActivity extends ActionBarActivity {
         hackerInterface.getNewsList(new Callback<HackerAPIRResponse>() {
             @Override
             public void success(HackerAPIRResponse hackerAPIRResponse, Response response) {
-                Log.d("std","success");
+                Log.d("std", "success");
                 collection.addAll(hackerAPIRResponse.getResults().getCollection1());
-                newsAdapter=new NewsAdapter(MainActivity.this,collection);
+                newsAdapter = new NewsAdapter(MainActivity.this, collection);
                 news_list_view.setAdapter(newsAdapter);
+                news_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("MainActivity", "On item clicked");
+                    }
+                });
 
 
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d("std","Failure in retrieving data from internet");
+                Log.d("std", "Failure in retrieving data from internet");
 
             }
         });
+
+//        news_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Log.d("MainActivity","On item clicked");
+//                Intent intent=new Intent(MainActivity.this,WebViewActivity.class);
+//                intent.putExtra("UrlName",collection.get(position).getNewsName().getHref());
+//                startActivity(intent);
+//            }
+//        });
 
 
     }
