@@ -1,8 +1,10 @@
 package com.novopay.hackathon.hackernewsclone;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
+import android.provider.BaseColumns;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,7 @@ import com.novopay.hackathon.hackernewsclone.Model.HackerAPIRResponse;
 import com.novopay.hackathon.hackernewsclone.Networking.HackerAPI;
 import com.novopay.hackathon.hackernewsclone.Provider.HackerDBHelper;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,8 @@ public class MainActivity extends ActionBarActivity {
         news_list_view=(ListView) findViewById(R.id.listView);
         collection = new ArrayList<Collection1>();
 
+        hackerDBHelper = new HackerDBHelper(MainActivity.this);
+        db = hackerDBHelper.getWritableDatabase();
 
         hackerInterface = HackerAPI.getAPI();
 
@@ -60,6 +65,26 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+
+    }
+
+
+    private long setFavourite(Collection1 collection){
+
+        ContentValues cv = new ContentValues();
+        cv.put(HackerDBHelper.FAVOURITE_COLOUMN.NAME,collection.getNewsName().getText());
+        cv.put(HackerDBHelper.FAVOURITE_COLOUMN.POINTS,collection.getPoints());
+        cv.put(HackerDBHelper.FAVOURITE_COLOUMN.URL,collection.getNewsName().getHref());
+
+        long row_id= db.insert(HackerDBHelper.TABLE.FAVOURITE,null,cv);
+
+        return row_id;
+
+    }
+
+    private Boolean removeFavourite(long row_id){
+
+       return db.delete(HackerDBHelper.TABLE.FAVOURITE, BaseColumns._ID+" = "+row_id,null)>0;
 
     }
 
