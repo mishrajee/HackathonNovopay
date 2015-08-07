@@ -3,7 +3,6 @@ package com.novopay.hackathon.hackernewsclone.Model;
 
 import com.google.gson.annotations.Expose;
 
-
 public class HackerAPIRResponse {
 
     @Expose

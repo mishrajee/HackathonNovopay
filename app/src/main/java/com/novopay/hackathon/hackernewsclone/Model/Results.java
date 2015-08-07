@@ -9,6 +9,8 @@ public class Results {
 
     @Expose
     private List<Collection1> collection1 = new ArrayList<Collection1>();
+    @Expose
+    private List<Collection2> collection2 = new ArrayList<Collection2>();
 
     /**
      * 
@@ -26,6 +28,24 @@ public class Results {
      */
     public void setCollection1(List<Collection1> collection1) {
         this.collection1 = collection1;
+    }
+
+    /**
+     * 
+     * @return
+     *     The collection2
+     */
+    public List<Collection2> getCollection2() {
+        return collection2;
+    }
+
+    /**
+     * 
+     * @param collection2
+     *     The collection2
+     */
+    public void setCollection2(List<Collection2> collection2) {
+        this.collection2 = collection2;
     }
 
 }

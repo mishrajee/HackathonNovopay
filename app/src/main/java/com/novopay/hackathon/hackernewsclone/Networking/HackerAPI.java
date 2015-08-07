@@ -27,10 +27,10 @@ public class HackerAPI {
     public interface HackerInterface{
 
         @GET("/7no4biyy?apikey=84SdVb8c8BnG2Ao8IXBSPWJIWi3sCx4f")
-        HackerAPIRResponse getMusicList();
+        HackerAPIRResponse getNewsList();
 
         @GET("/7no4biyy?apikey=84SdVb8c8BnG2Ao8IXBSPWJIWi3sCx4f")
-        void getMusicList(retrofit.Callback<HackerAPIRResponse> hackerAPIRResponseCallback);
+        void getNewsList(retrofit.Callback<HackerAPIRResponse> hackerAPIRResponseCallback);
 
     }
 
