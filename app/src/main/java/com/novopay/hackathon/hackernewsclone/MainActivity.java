@@ -2,6 +2,7 @@ package com.novopay.hackathon.hackernewsclone;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.novopay.hackathon.hackernewsclone.Model.HackerAPIRResponse;
 import com.novopay.hackathon.hackernewsclone.Networking.HackerAPI;
 import com.novopay.hackathon.hackernewsclone.Provider.HackerDBHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -35,12 +37,18 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         news_list_view=(ListView) findViewById(R.id.listView);
+        collection = new ArrayList<Collection1>();
+
+
+        hackerInterface = HackerAPI.getAPI();
 
         hackerInterface.getNewsList(new Callback<HackerAPIRResponse>() {
             @Override
             public void success(HackerAPIRResponse hackerAPIRResponse, Response response) {
+                Log.d("std","success");
                 collection.addAll(hackerAPIRResponse.getResults().getCollection1());
                 newsAdapter=new NewsAdapter(MainActivity.this,collection);
+                news_list_view.setAdapter(newsAdapter);
 
 
             }
@@ -72,6 +80,15 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        else
+        {
+            if(id==R.id.action_favourite_list)
+            {
+                Intent intent=new Intent(MainActivity.this,FavouriteActivity.class);
+                startActivity(intent);
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
