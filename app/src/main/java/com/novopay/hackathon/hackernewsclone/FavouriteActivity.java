@@ -51,6 +51,11 @@ public class FavouriteActivity extends ActionBarActivity{
             }while(mainCursor.moveToNext());
         }
 
+        OfflineNewsAdapter offlineNewsAdapter = new OfflineNewsAdapter(FavouriteActivity.this,collection);
+        favouritelistView.setAdapter(offlineNewsAdapter);
+
+        //favouritelistView.setOnItemClickListener(new );
+
 
 
     }

@@ -81,6 +81,9 @@ public class MainActivity extends ActionBarActivity {
             }while(mainCursor.moveToNext());
         }
 
+        /*OfflineNewsAdapter offlineNewsAdapter = new OfflineNewsAdapter(MainActivity.this,offCollection);
+        news_list_view.setAdapter(offlineNewsAdapter);
+        */
 
 
 
