@@ -55,6 +55,9 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("MainActivity", "On item clicked");
+                        Intent intent=new Intent(MainActivity.this,WebViewActivity.class);
+                         intent.putExtra("UrlName",collection.get(position).getNewsName().getHref());
+                        startActivity(intent);
                     }
                 });
 

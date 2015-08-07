@@ -21,6 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:id="@+id/favourite_button"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:layout_alignTop="@+id/news_name_view"
         android:background="@drawable/favourite_button"/>
 
