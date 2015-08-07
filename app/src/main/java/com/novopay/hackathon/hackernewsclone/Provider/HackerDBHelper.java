@@ -1,5 +1,6 @@
 package com.novopay.hackathon.hackernewsclone.Provider;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -44,14 +45,14 @@ public class HackerDBHelper extends SQLiteOpenHelper {
     final String CREATE_FAV_QUERY = "create table "+TABLE.FAVOURITE+" ("
             + BaseColumns._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"
             +FAVOURITE_COLOUMN.NAME+" TEXT NOT NULL,"
-            +FAVOURITE_COLOUMN.POINTS+" INTEGER,"
+            +FAVOURITE_COLOUMN.POINTS+" TEXT NOT NULL,"
             +FAVOURITE_COLOUMN.URL+" TEXT NOT NULL);";
 
     final String CREATE_OFF_QUERY = "create table "+TABLE.OFFLINE+" ("
             +BaseColumns._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"
-            +OFFLINE_COLOUMN.IS_FAV+" INTEGER"
+            +OFFLINE_COLOUMN.IS_FAV+" INTEGER,"
             +OFFLINE_COLOUMN.NAME+" TEXT NOT NULL,"
-            +OFFLINE_COLOUMN.POINTS+" INTEGER,"
+            +OFFLINE_COLOUMN.POINTS+" TEXT NOT NULL,"
             +OFFLINE_COLOUMN.URL+" TEXT NOT NULL);";
 
 
@@ -60,6 +61,14 @@ public class HackerDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_FAV_QUERY);
         db.execSQL(CREATE_OFF_QUERY);
+
+        ContentValues cv = new ContentValues();
+
+        cv.put(OFFLINE_COLOUMN.IS_FAV,1);
+        cv.put(OFFLINE_COLOUMN.NAME,"dum");
+        cv.put(OFFLINE_COLOUMN.POINTS,"points");
+        cv.put(OFFLINE_COLOUMN.URL,"http");
+        db.insert(TABLE.OFFLINE,null,cv);
 
     }
 

@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
         collection = new ArrayList<Collection1>();
 
         hackerDBHelper = new HackerDBHelper(MainActivity.this);
-        db = hackerDBHelper.getWritableDatabase();
+        db = hackerDBHelper.getReadableDatabase();
 
         hackerInterface = HackerAPI.getAPI();
 
@@ -101,7 +101,6 @@ public class MainActivity extends ActionBarActivity {
         db.delete(HackerDBHelper.TABLE.OFFLINE,null,null);
         ContentValues cv = new ContentValues();
         for(int i =0;i<collection.size();i++){
-            cv.clear();
             cv.put(HackerDBHelper.OFFLINE_COLOUMN.NAME,collection.get(i).getNewsName().getText());
             cv.put(HackerDBHelper.OFFLINE_COLOUMN.URL,collection.get(i).getNewsName().getHref());
             cv.put(HackerDBHelper.OFFLINE_COLOUMN.POINTS,collection.get(i).getPoints());
@@ -119,13 +118,14 @@ public class MainActivity extends ActionBarActivity {
             Log.d("std","database updated");
 
 
+
         }
 
     }
 
     private Boolean isFavourite(String url){
 
-        Cursor cursor = db.rawQuery("select * "+" from "+ HackerDBHelper.TABLE.FAVOURITE+" where "+ HackerDBHelper.FAVOURITE_COLOUMN.URL+" = "+url,null);
+        Cursor cursor = db.rawQuery("select * "+" from "+ HackerDBHelper.TABLE.FAVOURITE+" where "+ HackerDBHelper.FAVOURITE_COLOUMN.URL+" = \""+url+"\"",null);
         if(cursor!=null){
             return true;
         }
