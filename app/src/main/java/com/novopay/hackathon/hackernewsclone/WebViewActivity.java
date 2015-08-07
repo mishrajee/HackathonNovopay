@@ -19,7 +19,7 @@ public class WebViewActivity extends ActionBarActivity {
         setContentView(R.layout.webview_activity);
         myWebView = (WebView) findViewById(R.id.webview);
         //myWebView.setWebViewClient(new WebViewClient());
-        myWebView.loadUrl("http://www.bloomberg.com/news/features/2015-08-06/google-s-6-billion-miscalculation-on-the-eu?cmpid=BBD080615_BIZ");
+        myWebView.loadUrl(getIntent().getStringExtra("UrlName"));
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
     }
