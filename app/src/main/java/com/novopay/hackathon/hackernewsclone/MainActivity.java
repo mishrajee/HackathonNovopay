@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -56,14 +57,19 @@ public class MainActivity extends ActionBarActivity {
                 collection.addAll(hackerAPIRResponse.getResults().getCollection1());
                 newsAdapter = new NewsAdapter(MainActivity.this, collection);
                 news_list_view.setAdapter(newsAdapter);
+
+                updateOfflineDatabase(collection);
+
+
+
                 news_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("MainActivity", "On item clicked");
-                        Intent intent=new Intent(MainActivity.this,WebViewActivity.class);
-                        intent.putExtra("UrlName",collection.get(position).getNewsName().getHref());
+                        Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                        intent.putExtra("UrlName", collection.get(position).getNewsName().getHref());
 
-                         intent.putExtra("UrlName",collection.get(position).getNewsName().getHref());
+                        intent.putExtra("UrlName", collection.get(position).getNewsName().getHref());
                         startActivity(intent);
                     }
                 });
@@ -91,6 +97,42 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    private void updateOfflineDatabase(List<Collection1> collection) {
+        db.delete(HackerDBHelper.TABLE.OFFLINE,null,null);
+        ContentValues cv = new ContentValues();
+        for(int i =0;i<collection.size();i++){
+            cv.clear();
+            cv.put(HackerDBHelper.OFFLINE_COLOUMN.NAME,collection.get(i).getNewsName().getText());
+            cv.put(HackerDBHelper.OFFLINE_COLOUMN.URL,collection.get(i).getNewsName().getHref());
+            cv.put(HackerDBHelper.OFFLINE_COLOUMN.POINTS,collection.get(i).getPoints());
+
+            if(isFavourite(collection.get(i).getNewsName().getHref())){
+                cv.put(HackerDBHelper.OFFLINE_COLOUMN.IS_FAV,1);
+            }
+            else
+            {
+                cv.put(HackerDBHelper.OFFLINE_COLOUMN.IS_FAV,0);
+
+            }
+
+            db.insert(HackerDBHelper.TABLE.OFFLINE,null,cv);
+            Log.d("std","database updated");
+
+
+        }
+
+    }
+
+    private Boolean isFavourite(String url){
+
+        Cursor cursor = db.rawQuery("select * "+" from "+ HackerDBHelper.TABLE.FAVOURITE+" where "+ HackerDBHelper.FAVOURITE_COLOUMN.URL+" = "+url,null);
+        if(cursor!=null){
+            return true;
+        }
+
+        return false;
+    }
+
 
     private void setFavourite(Collection1 collection){
 
@@ -100,7 +142,7 @@ public class MainActivity extends ActionBarActivity {
         cv.put(HackerDBHelper.FAVOURITE_COLOUMN.POINTS,collection.getPoints());
         cv.put(HackerDBHelper.FAVOURITE_COLOUMN.URL,collection.getNewsName().getHref());
 
-        db.insert(HackerDBHelper.TABLE.FAVOURITE,null,cv);
+        db.insert(HackerDBHelper.TABLE.FAVOURITE, null, cv);
 
         cv.clear();
         //cv.put(HackerDBHelper.OFFLINE_COLOUMN.NAME,collection.getNewsName().getText());
@@ -153,4 +195,8 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 }
